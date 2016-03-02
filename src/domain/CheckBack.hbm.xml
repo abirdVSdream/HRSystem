@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="domain">
+  <class name="CheckBack" table="check_table">
+  	<cache usage="read-only"/>
+  	<id name="id" column="check_id" type="integer">
+  		<generator class="identity"></generator>
+  	</id>
+  	<property name="reason" column="check_reason" type="string" length="50"/>
+  	<property name="result" column="check_result" type="boolean"
+  		length="50" not-null="true"/>
+  	
+  	<many-to-one name="app" column="app_id" not-null="true"
+  		class="Application" unique="true" lazy="false"/>
+  	<many-to-one name="manager" column="mgr_id" class="Manager"
+  		not-null="true" lazy="false"></many-to-one>	
+  </class>
+</hibernate-mapping>
