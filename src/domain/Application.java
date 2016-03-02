@@ -32,7 +32,7 @@ public class Application {
 	public void setReason(String reason) {
 		this.reason = reason;
 	}
-	public boolean isResult() {
+	public boolean getResult() {
 		return result;
 	}
 	public void setResult(boolean result) {

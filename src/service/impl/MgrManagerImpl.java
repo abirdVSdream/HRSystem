@@ -1,5 +1,7 @@
 package service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -10,8 +12,11 @@ import dao.CheckBackDao;
 import dao.EmployeeDao;
 import dao.ManagerDao;
 import dao.PaymentDao;
+import domain.Application;
+import domain.Attend;
 import domain.Employee;
 import domain.Manager;
+import domain.Payment;
 import exception.HrException;
 import service.MgrManager;
 import vo.AppBean;
@@ -77,21 +82,79 @@ public class MgrManagerImpl implements MgrManager
 			throw new HrException("不好意思。您不是经理或者您没有登录");
 		}
 		List<Employee> emps = empDao.findByMgr(manager);
+		if(emps == null ||emps.size() < 1)
+		{
+			throw new HrException("你的部门没有员工");
+		}
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.MONTH, -1);
-		return null;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm");
+		String payMonth = sdf.format(c.getTime());
+		List<SalaryBean> result = new ArrayList<SalaryBean>();
+		for (Employee e : emps)
+		{
+			Payment p = payDao.findByPayMonthAndEmp(payMonth, e);
+			if(p != null)
+			{
+				result.add(new SalaryBean(e.getName(),p.getAccoum()));
+			}
+		}
+		return result;
 	}
 
 	@Override
 	public List<EmpBean> getEmployeeBymgr(String mgr) throws HrException {
 		// TODO Auto-generated method stub
-		return null;
+		Manager manager = mgrDao.findByName(mgr);
+		if(manager == null)
+		{
+			throw new HrException("不好意思。您不是经理或者您没有登录");
+		}
+		List<Employee> emps = empDao.findByMgr(manager);
+		if(emps == null || emps.size() < 1)
+		{
+			throw new HrException("你的部门下没有员工");
+		}
+		List<EmpBean> result = new ArrayList<EmpBean>();
+		for(Employee e : emps)
+		{
+			result.add(new EmpBean(e.getName(),e.getPass(),e.getSalary()));
+		}
+		
+		return result;
 	}
 
 	@Override
 	public List<AppBean> getAppByMgr(String mgr) throws HrException {
 		// TODO Auto-generated method stub
-		return null;
+		Manager manager = mgrDao.findByName(mgr);
+		if(manager == null)
+		{
+			throw new HrException("不好意思，你不是经理或者您没有登陆");
+		}
+		List<Employee> emps = empDao.findByMgr(manager);
+		if(emps == null || emps.size() < 1)
+		{
+			throw new HrException("你的部门下没有员工");
+		}
+		List<AppBean> result = new ArrayList<AppBean>();
+		for(Employee e: emps)
+		{
+			List<Application> apps =  appDao.findByEmp(e);
+			if(apps != null && apps.size() > 0)
+			{
+				for(Application app : apps)
+				{
+					if(app.getResult() == false)
+					{
+						Attend attend = app.getAttend();
+						result.add(new AppBean(app.getId(),e.getName(),attend.getType().getName(),
+									app.getType().getName(),app.getReason()));
+					}
+				}
+			}
+		}
+		return result;
 	}
 
 	@Override
