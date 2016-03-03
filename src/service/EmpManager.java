@@ -84,7 +84,7 @@ public interface EmpManager {
 	 * @param isCome 是否是上班打卡
 	 * @return 打卡结果
 	 */
-	public int punch(String user , String dutyDay , boolean iscome);
+	public int punch(String user , String dutyDay , boolean isCome);
 	
 	/**
 	 * 根据员工浏览自己的工资

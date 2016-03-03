@@ -14,6 +14,7 @@ import dao.ManagerDao;
 import dao.PaymentDao;
 import domain.Application;
 import domain.Attend;
+import domain.CheckBack;
 import domain.Employee;
 import domain.Manager;
 import domain.Payment;
@@ -96,7 +97,7 @@ public class MgrManagerImpl implements MgrManager
 			Payment p = payDao.findByPayMonthAndEmp(payMonth, e);
 			if(p != null)
 			{
-				result.add(new SalaryBean(e.getName(),p.getAccoum()));
+				result.add(new SalaryBean(e.getName(),p.getAmount()));
 			}
 		}
 		return result;
@@ -160,7 +161,27 @@ public class MgrManagerImpl implements MgrManager
 	@Override
 	public void check(int appid, String mgrName, boolean result) {
 		// TODO Auto-generated method stub
-
+		Application app = appDao.get(appid);
+		CheckBack check = new CheckBack();
+		check.setApplication(app);
+		if(result)
+		{
+			//设置通过申请
+			check.setResult(true);
+			//修改申请为已经批复
+			app.setResult(true);
+			appDao.save(app);
+			//修改出勤的类型
+			Attend attend = app.getAttend();
+			attend.setType(app.getType());
+			attendDao.save(attend);
+		}else
+		{
+			check.setResult(false);
+			app.setResult(true);
+			appDao.save(app);
+		}
+		checkDao.save(check);
 	}
 
 }

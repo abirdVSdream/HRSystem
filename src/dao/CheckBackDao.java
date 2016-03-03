@@ -28,7 +28,7 @@ public interface CheckBackDao {
 	 * @param checkBack 需要被持久化的CheckBack实例
 	 * @return CheckBack实例被持久化后的标识属性值
 	 */
-	Integer save(Attend attend);
+	Integer save(CheckBack checkBack);
 	
 	/**
 	 * 修改指定的CheckBack实例

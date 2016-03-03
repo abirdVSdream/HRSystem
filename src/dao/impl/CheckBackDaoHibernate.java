@@ -28,9 +28,9 @@ public class CheckBackDaoHibernate extends YeekuHibernateDaoSupport implements C
 	}
 
 	@Override
-	public Integer save(Attend attend) {
+	public Integer save(CheckBack checkBack) {
 		// TODO Auto-generated method stub
-		return (Integer)getHibernateTemplate().save(attend);
+		return (Integer)getHibernateTemplate().save(checkBack);
 	}
 
 	@Override

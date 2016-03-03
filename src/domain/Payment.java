@@ -1,19 +1,21 @@
 package domain;
 
+import domain.Employee;
+
 public class Payment {
 
 	private static final long serialVersionUID = 48L;
 	private Integer id;
 	private String payMonth;
-	private double accoum;
-	private Manager manager;
+	private double amount;
+	private Employee employee;
 	public Payment() {}
-	public Payment(Integer id,String payMonth,double accoum,Manager manager)
+	public Payment(Integer id,String payMonth,double amount,Manager manager, Employee employee)
 	{
 		this.id = id;
 		this.payMonth= payMonth;
-		this.accoum= accoum;
-		this.manager = manager;
+		this.amount= amount;
+		this.employee = employee;
 	}
 	public Integer getId() {
 		return id;
@@ -27,17 +29,19 @@ public class Payment {
 	public void setpayMonth(String payMonth) {
 		this.payMonth = payMonth;
 	}
-	public double getAccoum() {
-		return accoum;
+	public double getAmount() {
+		return amount;
 	}
-	public void setAccoum(double accoum) {
-		this.accoum = accoum;
+	public void setAmount(double amount) {
+		this.amount = amount;
 	}
-	public Manager getManager() {
-		return manager;
+	
+	
+	public Employee getEmployee() {
+		return employee;
 	}
-	public void setManager(Manager manager) {
-		this.manager = manager;
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
