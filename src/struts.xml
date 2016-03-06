@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 指定Struts2配置文件的DTD信息 -->
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN"
+	"http://struts.apache.org/dtds/struts-2.1.7.dtd">
+<struts>
+
+
+<!--============================下面是员工角色的Action========================-->
+
+
+<!-- 定义处理登录系统的action -->
+<action name="processLogin" class="action.LoginAction">
+	<result name="input">/WEB-INF/content/login.jsp</result>
+	<result name="mgr">/WEB-INF/content/manager/index.jsp</result>
+	<result name="emp">/WEB-INF/content/employee/index.jsp</result>
+	<result name="error">/WEB-INF/content/login.jsp</result>
+</action>
+	<!-- 进入打卡 -->
+	<action name="*Punch" class="action.PunchAction">
+		<interceptor-ref name="empStack"/>
+		<result>/WEB-INF/content/{1}/punch.jsp</result>
+	</action>
+	
+	<action name="*Come" method="come" class="action.ProcessPunchAction">
+		<interceptor-ref name="empStack"/>
+		<result>/WEB-INF/content/{1}/index.jsp</result>
+	</action>
+	<action name="*Leave" method="leave" class="action.ProcessPunchAction">
+		<interceptor-ref name="empStack"/>
+		<result>WEB-INF/content/employee/viewUnAttend.jsp</result>
+	</action>
+</struts>
