@@ -1,6 +1,9 @@
 package action;
 
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts2.interceptor.ServletRequestAware;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -13,13 +16,13 @@ import com.opensymphony.xwork2.ActionSupport;
  */
 
 public class LogoutAction extends ActionSupport implements ServletRequestAware{
-private HttpServletRequestAware request;
+private HttpServletRequest request;
 
-public HttpServletRequestAware getRequest() {
+public HttpServletRequest getRequest() {
 	return request;
 }
 
-public void setRequest(HttpServletRequestAware request) {
+public void setRequest(HttpServletRequest request) {
 	this.request = request;
 }
 public String execute() throws Exception
