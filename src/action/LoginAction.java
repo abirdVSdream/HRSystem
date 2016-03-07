@@ -46,7 +46,7 @@ public class LoginAction extends EmpBaseAction
 		if(vercode.equalsIgnoreCase(ver2))
 		{
 			//调用业务逻辑方法来处理登录请求
-			int result = mgr.validLogin(getManager());
+			int result = emp.validLogin(getManager());
 			//登录结果为普通员工
 			if(result == LOGIN_EMP)
 			{

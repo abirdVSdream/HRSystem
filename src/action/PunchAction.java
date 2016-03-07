@@ -32,7 +32,7 @@ public class PunchAction extends EmpBaseAction
 		//格式化当前时间
 		String dutyDay = sdf.format(new Date());
 		//调用业务逻辑方法处理用户请求
-		int result = mgr.validPunch(user,dutyDay);
+		int result = emp.validPunch(user,dutyDay);
 		setPunchIsValid(result);
 		return SUCCESS;
 		
