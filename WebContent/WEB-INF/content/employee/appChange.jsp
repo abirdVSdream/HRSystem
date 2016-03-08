@@ -10,7 +10,7 @@
 </head>
 <body>
 <%@include file="../header.jsp"%>
-<%@include file="empheader" %>
+<%@include file="empheader.jsp" %>
 <table width="780" align="center" background="${pageContext.request.contextPath}/images/bodybg.jpg">
 <tr>
 <td>
