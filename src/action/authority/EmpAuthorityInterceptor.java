@@ -24,7 +24,7 @@ public class EmpAuthorityInterceptor extends AbstractInterceptor {
 	}
 
 	@Override
-	public String intercept(ActionInvocation arg0) throws Exception {
+	public String intercept(ActionInvocation invocation) throws Exception {
 		// TODO Auto-generated method stub
 		ActionContext ctx = ActionContext.getContext();
 		String level = (String)ctx.getSession().get(WebConstant.EMP_LEVEL);

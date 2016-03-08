@@ -18,11 +18,7 @@ import com.opensymphony.xwork2.ActionSupport;
 public class LogoutAction extends ActionSupport implements ServletRequestAware{
 private HttpServletRequest request;
 
-public HttpServletRequest getRequest() {
-	return request;
-}
-
-public void setRequest(HttpServletRequest request) {
+public void setServletRequest(HttpServletRequest request) {
 	this.request = request;
 }
 public String execute() throws Exception
@@ -33,6 +29,5 @@ public String execute() throws Exception
 	session.invalidate();
 	return SUCCESS;
 }
-
 }
 

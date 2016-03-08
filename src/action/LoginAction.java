@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import domain.Manager;
 import action.base.EmpBaseAction;
+import static service.EmpManager.*;
 
 
 public class LoginAction extends EmpBaseAction
@@ -59,7 +60,7 @@ public class LoginAction extends EmpBaseAction
 			else if(result == LOGIN_MGR)
 			{
 				ctx.getSession().put(WebConstant.USER,manager.getName());
-				ctx.getSession().put(WebConstant.LEVEL, WebConstant.MGL_LEVEL);
+				ctx.getSession().put(WebConstant.LEVEL, WebConstant.MGR_LEVEL);
 				setTip("您已经成功登录系统");
 				return MGR_RESULT;
 			}

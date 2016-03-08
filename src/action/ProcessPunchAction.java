@@ -1,6 +1,7 @@
 package action;
 
 import service.EmpManager;
+import static service.EmpManager.*;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
