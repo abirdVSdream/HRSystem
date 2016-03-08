@@ -8,7 +8,7 @@
 	<constant name="struts.custom.il8n.resources" value="resource"/>
 	<constant name="struts.il8n.encoding" value="utf-8"/>
 	<constant name="struts.devMode" value="true"/>
-	<package name="default" extends="struts-default"/>
+	<package name="default" extends="struts-default">
 		<interceptors>
 			<!-- 配置普通员工角色的权限检查拦截器 -->
 			<interceptor name="empAuth" class="action.authority.EmpAuthorityInterceptor"/>
@@ -25,17 +25,36 @@
 				<interceptor-ref name="mgrAuth"/>
 			</interceptor-stack>
 		</interceptors>
+		
+		<!-- 定义全局result映射 -->
+		<global-results>
+			<!-- 定义sql、root两个异常对应的视图页 -->
+			<result name="bussiness">/WEB-INF/content/error.jsp</result>
+			<result name="root">/WEB-INF/content/error.jsp</result>
+			<!-- 定义login逻辑使徒对应的资源图 -->
+			<result name="login">/WEB-INF/content/login.jsp</result>
+		</global-results>
+		
+		<!-- 定义全局异常映射 -->
+		<global-exception-mappings>
+			<!-- 当Action中遇到HrException异常时，系统将转入name为business的结果中 -->
+			<exception-mapping result="bussiness" exception="exception.HrException"></exception-mapping>
+			
+			<!-- 当Action中遇到Exception异常时，系统将转入name为root的结果中 -->
+			<exception-mapping result="root" exception="java.lang.Exception"></exception-mapping>
+		</global-exception-mappings>
+
 
 <!--============================下面是员工角色的Action========================-->
 
 
-<!-- 定义处理登录系统的action -->
-<action name="processLogin" class="action.LoginAction">
-	<result name="input">/WEB-INF/content/login.jsp</result>
-	<result name="mgr">/WEB-INF/content/manager/index.jsp</result>
-	<result name="emp">/WEB-INF/content/employee/index.jsp</result>
-	<result name="error">/WEB-INF/content/login.jsp</result>
-</action>
+	<!-- 定义处理登录系统的action -->
+	<action name="processLogin" class="action.LoginAction">
+		<result name="input">/WEB-INF/content/login.jsp</result>
+		<result name="mgr">/WEB-INF/content/manager/index.jsp</result>
+		<result name="emp">/WEB-INF/content/employee/index.jsp</result>
+		<result name="error">/WEB-INF/content/login.jsp</result>
+	</action>
 	<!-- 进入打卡 -->
 	<action name="*Punch" class="action.PunchAction">
 		<interceptor-ref name="empStack"/>
@@ -51,6 +70,14 @@
 		<interceptor-ref name="empStack"/>
 		<result>WEB-INF/content/employee/viewUnAttend.jsp</result>
 	</action>
+	
+	<!-- 查看自己的非正常出勤 -->
+	<action name="viewUnPunch" class="action.ViewUnAttendAction">
+		<interceptor-ref name="basicStack"/>
+		<interceptor-ref name="empAuth"/>
+		<result>/WEB-INF/content/employee/viewUnAttend.jsp</result>
+	</action>
+	
 	<!-- 进入异动申请 -->
 	<action name="appChange" class="action.AppChangeAction">
 		<interceptor-ref name="store">
@@ -60,6 +87,7 @@
 		<interceptor-ref name="empAuth"/>
 		<result>/WEB-INF/content/employee/appChange.jsp</result>
 	</action>
+	
 	<!-- 提交异动申请 -->
 	<action name="processApp" class="action.ProcessAppAction">
 		<interceptor-ref name="store">
@@ -68,4 +96,49 @@
 		<interceptor-ref name="empStack"/>
 		<result name="input" type="redirect">/appChange.action?attid=${attId}</result>
 	</action>
+	
+	<!-- ==================下面是经理角色的Action============= -->
+	<action name="viewDeptSal" class="action.ViewDeptAction">
+		<interceptor-ref name="basicStack"/>
+		<interceptor-ref name="mgrAuth"/>
+		<result>/WEB-INF/content/manager/viewEmp.jsp</result>
+	</action>
+	
+	<!-- 经理查看员工 -->
+	<action name="viewEmp" class="action.ViewEmpAction">
+		<interceptor-ref name="basicStack"/>
+		<interceptor-ref name="mgrAuth"/>
+		<result>WEB-INF/content/manager/viewEmp.jsp</result>
+	</action>
+	
+	<!-- 经理查看申请 -->
+	<action name="viewApp" class="action.ViewAppAction">
+		<interceptor-ref name="basicStack"/>
+		<interceptor-ref name="mgrAuth"/>
+		<result>/WEB-INF/content/manager/addEmp.jsp</result>
+	</action>
+	
+	<!-- 经理增加员工 -->
+	<action name="action.AddEmpAction">
+		<!-- 使用系统默认的拦截器栈 -->
+		<interceptor-ref name="mgrStack"/>
+		<!-- 使用防刷新的token拦截器 -->
+		<interceptor-ref name="token"/>
+		<!-- 定义重复提交转向的视图，该逻辑视图名必须是invalid。token -->
+		<result name="invalid.token">/WEB-INF/content/manager/addEmp.jsp</result>
+		<result name="input">WEB-INF/content/manager/addEmp.jsp</result>
+		<result name="failure">WEB-INF/content/manager/addEmp.jsp</result>
+		<result>/WEB-INF/content/manager/index.jsp</result>
+	</action>
+	
+	<!-- 经理处理申请 -->
+	<action name="check" class="action.CheckAppAction">
+		<interceptor-ref name="mgrStack"/>
+		<result type="chain">viewApp</result>
+	</action>
+	
+	<action name="*">
+		<result>/WEB-INF/content/{1}.jsp</result>
+	</action>
+</package>
 </struts>
