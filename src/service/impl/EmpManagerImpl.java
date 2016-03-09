@@ -24,15 +24,20 @@ import vo.AttendBean;
 import vo.PaymentBean;
 
 /**
- * <p>Title: EmployeImpl.java</p>
- * <p>Description: </p>
- * @author  caizelin
+ * <p>
+ * Title: EmployeImpl.java
+ * </p>
+ * <p>
+ * Description:
+ * </p>
+ * 
+ * @author caizelin
  * @date 2016年3月3日
- * @version  1.0
+ * @version 1.0
  */
 
-public class EmployeImpl implements EmpManager {
-	
+public class EmpManagerImpl implements EmpManager {
+
 	private ApplicationDao appDao;
 	private AttendDao attendDao;
 	private AttendTypeDao typeDao;
@@ -40,11 +45,11 @@ public class EmployeImpl implements EmpManager {
 	private EmployeeDao empDao;
 	private ManagerDao mgrDao;
 	private PaymentDao payDao;
-	
-	public EmployeImpl() {
+
+	public EmpManagerImpl() {
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public void setAppDao(ApplicationDao appDao) {
 		this.appDao = appDao;
 	}
@@ -76,16 +81,11 @@ public class EmployeImpl implements EmpManager {
 	@Override
 	public int validLogin(Manager mgr) {
 		// TODO Auto-generated method stub
-		if(mgrDao.findByNameAndPass(mgr).size() >= 1)
-		{
+		if (mgrDao.findByNameAndPass(mgr).size() >= 1) {
 			return LOGIN_MGR;
-		}
-		else if(empDao.findByNameAndPass(mgr).size() >= 1)
-		{
+		} else if (empDao.findByNameAndPass(mgr).size() >= 1) {
 			return LOGIN_EMP;
-		}
-		else
-		{
+		} else {
 			return LOGIN_FAIL;
 		}
 	}
@@ -95,23 +95,19 @@ public class EmployeImpl implements EmpManager {
 		// TODO Auto-generated method stub
 		System.out.println("自动插入旷工记录");
 		List<Employee> emps = empDao.findAll();
-		//获取当前时间
+		// 获取当前时间
 		String dutyDay = new java.sql.Date(System.currentTimeMillis()).toString();
-		for(Employee e : emps)
-		{
-			//获取旷工对应的出勤类型
+		for (Employee e : emps) {
+			// 获取旷工对应的出勤类型
 			AttendType atype = typeDao.get(6);
 			Attend att = new Attend();
 			att.setDutyDay(dutyDay);
 			att.setType(atype);
-			//如果当前时间是早上，对应于上班打卡
-			if(Calendar.getInstance().get(Calendar.HOUR_OF_DAY)<AM_LIMIT)
-			{
+			// 如果当前时间是早上，对应于上班打卡
+			if (Calendar.getInstance().get(Calendar.HOUR_OF_DAY) < AM_LIMIT) {
 				att.setIsCome(true);
-			}
-			else
-			{
-				//下班打卡
+			} else {
+				// 下班打卡
 				att.setIsCome(false);
 			}
 			att.setEmployee(e);
@@ -124,73 +120,58 @@ public class EmployeImpl implements EmpManager {
 		// TODO Auto-generated method stub
 		System.out.println("auto pay");
 		List<Employee> emps = empDao.findAll();
-		//get last Month
+		// get last Month
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.DAY_OF_MONTH, -15);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm");
 		String payMonth = sdf.format(c.getTime());
-		//calculate the pay of each employee last month
-		for(Employee e:emps)
-		{
+		// calculate the pay of each employee last month
+		for (Employee e : emps) {
 			Payment pay = new Payment();
-			//get the salary of this employee
+			// get the salary of this employee
 			double amount = e.getSalary();
-			//get the last-month-attend of this employee
+			// get the last-month-attend of this employee
 			List<Attend> attends = attendDao.fildByEmp(e);
-			//add attend-pay from  salary
-			for(Attend att : attends)
-			{
+			// add attend-pay from salary
+			for (Attend att : attends) {
 				amount += att.getType().getAcerce();
 			}
-			//add amount 
+			// add amount
 			pay.setpayMonth(payMonth);
 			pay.setEmployee(e);
 			pay.setAmount(amount);
 			payDao.save(pay);
 		}
-		
+
 	}
 
 	@Override
 	public int validPunch(String user, String dutyDay) {
 		// if the user is not find ,return can't punch
 		Employee emp = empDao.findByName(user);
-		if(emp == null)
-		{
+		if (emp == null) {
 			return NO_PUNCH;
 		}
-		//find the attends for this employee at today
+		// find the attends for this employee at today
 		List<Attend> attends = attendDao.findByEmpAndDutyDate(emp, dutyDay);
-		//if System isn't input the empty record,unable punch 
-		if(attends == null || attends.size() <= 0)
-		{
+		// if System isn't input the empty record,unable punch
+		if (attends == null || attends.size() <= 0) {
 			return NO_PUNCH;
 		}
-		//punch
-		else if(attends.size() == 1 && attends.get(0).getIsCome()
-				&& attends.get(0).getPunchTime() == null)
-		{
+		// punch
+		else if (attends.size() == 1 && attends.get(0).getIsCome() && attends.get(0).getPunchTime() == null) {
 			return COME_PUNCH;
-		}
-		else if(attends.size() == 1 && attends.get(0).getPunchTime() == null)
-		{
+		} else if (attends.size() == 1 && attends.get(0).getPunchTime() == null) {
 			return LEAVE_PUNCH;
-		}
-		else if(attends.size() == 2)
-		{
-			//can punch at working and go off work
-			if(attends.get(0).getPunchTime() == null
-					&& attends.get(1).getPunchTime() == null)
-			{
+		} else if (attends.size() == 2) {
+			// can punch at working and go off work
+			if (attends.get(0).getPunchTime() == null && attends.get(1).getPunchTime() == null) {
 				return BOTH_PUNCH;
 			}
-			//only can punch at go off work
-			else if(attends.get(1).getPunchTime() == null)
-			{
+			// only can punch at go off work
+			else if (attends.get(1).getPunchTime() == null) {
 				return LEAVE_PUNCH;
-			}
-			else
-			{
+			} else {
 				return NO_PUNCH;
 			}
 		}
@@ -200,50 +181,41 @@ public class EmployeImpl implements EmpManager {
 	@Override
 	public int punch(String user, String dutyDay, boolean isCome) {
 		Employee emp = empDao.findByName(user);
-		if(emp == null)
-		{
+		if (emp == null) {
 			return PUNCH_FAIL;
 		}
-		//find employee punch-attends on this time
+		// find employee punch-attends on this time
 		Attend attend = attendDao.findByEmpAndDutyDayAndCome(emp, dutyDay, isCome);
-		if(attend == null)
-		{
+		if (attend == null) {
 			return PUNCH_FAIL;
 		}
-		//have punch
-		if(attend.getPunchTime() != null)
-		{
+		// have punch
+		if (attend.getPunchTime() != null) {
 			return PUNCHED;
 		}
 		System.out.println("======punch======");
-		//get punch time
+		// get punch time
 		int punchHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
 		attend.setPunchTime(new Date());
-		//punch for go to work
-		if(isCome)
-		{
-			//before 9:00 is normal
-			if(punchHour < COME_LIMIT)
-			{
+		// punch for go to work
+		if (isCome) {
+			// before 9:00 is normal
+			if (punchHour < COME_LIMIT) {
 				attend.setType(typeDao.get(1));
 			}
-			//9-11 is late
-			else if(punchHour < LATE_LIMIT)
-			{
+			// 9-11 is late
+			else if (punchHour < LATE_LIMIT) {
 				attend.setType(typeDao.get(4));
 			}
 		}
-		//punch for go off work
-		else
-		{
-			//after 18:00 is normal
-			if(punchHour > LEAVE_LIMIT)
-			{
+		// punch for go off work
+		else {
+			// after 18:00 is normal
+			if (punchHour > LEAVE_LIMIT) {
 				attend.setType(typeDao.get(1));
 			}
-			//between 16 and 18 is early-leave
-			else if( punchHour < EARLY_LIMIT)
-			{
+			// between 16 and 18 is early-leave
+			else if (punchHour < EARLY_LIMIT) {
 				attend.setType(typeDao.get(5));
 			}
 		}
@@ -253,32 +225,29 @@ public class EmployeImpl implements EmpManager {
 
 	@Override
 	public List<PaymentBean> empSalary(String empName) {
-		//get employee
+		// get employee
 		Employee emp = empDao.findByName(empName);
-		//get the pays for this employee
-		List<Payment> pays =payDao.findByEmp(emp);
+		// get the pays for this employee
+		List<Payment> pays = payDao.findByEmp(emp);
 		List<PaymentBean> result = new ArrayList<PaymentBean>();
-		//package vo collection
-		for(Payment p : pays)
-		{
-			result.add(new PaymentBean(p.getpayMonth(),p.getAmount()));
+		// package vo collection
+		for (Payment p : pays) {
+			result.add(new PaymentBean(p.getpayMonth(), p.getAmount()));
 		}
 		return result;
 	}
 
 	@Override
 	public List<AttendBean> unAttend(String empName) {
-		//get normal working
+		// get normal working
 		AttendType type = typeDao.get(1);
 		Employee emp = empDao.findByName(empName);
-		//find  unattend
+		// find unattend
 		List<Attend> attends = attendDao.findByEmpUnAttend(emp, type);
 		List<AttendBean> result = new ArrayList<AttendBean>();
-		//package vo collection
-		for(Attend att : attends)
-		{
-			result.add(new AttendBean(att.getId(),att.getDutyDay(),
-					att.getType().getName(),att.getPunchTime()));
+		// package vo collection
+		for (Attend att : attends) {
+			result.add(new AttendBean(att.getId(), att.getDutyDay(), att.getType().getName(), att.getPunchTime()));
 		}
 		return result;
 	}
@@ -295,8 +264,7 @@ public class EmployeImpl implements EmpManager {
 		AttendType type = typeDao.get(typeId);
 		app.setAttend(att);
 		app.setType(type);
-		if(reason != null)
-		{
+		if (reason != null) {
 			app.setReason(reason);
 		}
 		appDao.save(app);
@@ -304,4 +272,3 @@ public class EmployeImpl implements EmpManager {
 	}
 
 }
-

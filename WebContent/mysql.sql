@@ -74,26 +74,26 @@ create table  check_table
 );
 
 insert into type_table ( type_name , amerce_amount)
-	values ( 'Õı³£', 0);
+	values ( 'æ­£å¸¸', 0);
 insert into type_table ( type_name , amerce_amount)
-	values ( 'ÊÂ¼Ù', -20);
+	values ( 'äº‹å‡', -20);
 insert into type_table ( type_name , amerce_amount)
-	values ( '²¡¼Ù', -10);
+	values ( 'ç—…å‡', -10);
 insert into type_table ( type_name , amerce_amount)
-	values ( '³Ùµ½', -10);
+	values ( 'è¿Ÿåˆ°', -10);
 insert into type_table ( type_name , amerce_amount)
-	values ( 'ÔçÍË', -10);
+	values ( 'æ—©é€€', -10);
 insert into type_table ( type_name , amerce_amount)
-	values ( '¿õ¹¤', -30);
+	values ( 'æ—·å·¥', -30);
 insert into type_table ( type_name , amerce_amount)
-	values ( '³ö²î', 10);
+	values ( 'å‡ºå·®', 10);
 
-# ²åÈë¾­Àí
+# æ’å…¥ç»ç†
 insert into emp_table (emp_type , emp_name , emp_pass , emp_salary , mgr_id , dept_name)
-	values (2, 'oracle', 'oracle' , 5000 , null , 'DB²¿');
+	values (2, 'oracle', 'oracle' , 5000 , null , 'DBéƒ¨');
 insert into emp_table (emp_type , emp_name , emp_pass , emp_salary , mgr_id , dept_name)
-	values (2, 'weblogic', 'weblogic' , 6000 , null , 'Server²¿');
-# Ô±¹¤
+	values (2, 'weblogic', 'weblogic' , 6000 , null , 'Serveréƒ¨');
+# å‘˜å·¥
 insert into emp_table (emp_type , emp_name , emp_pass , emp_salary , mgr_id)
 	values (1 , 'mysql', 'mysql' , 3000 , 1);
 insert into emp_table (emp_type , emp_name , emp_pass , emp_salary , mgr_id)

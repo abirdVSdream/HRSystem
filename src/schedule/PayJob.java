@@ -28,7 +28,6 @@ public class PayJob extends QuartzJobBean {
 	}
 
 
-	@Override
 	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
 		// TODO Auto-generated method stub
 

@@ -9,7 +9,7 @@
 	  <id name="id" type="integer"  column="app_id">
 	  	<generator class="identity"/>
 	  </id>
-	  <property name="reason" column="app_reason" type="string"/>
+	  <property name="reason" column="app_reason" type="string" length="50"/>
 	  <property name="result" column="app_result" type="boolean"/>
 	  <many-to-one name="attend" column="attend_id" class="Attend" 
 	      not-null="true" lazy="false"/>

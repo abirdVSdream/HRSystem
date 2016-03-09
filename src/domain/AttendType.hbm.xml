@@ -6,10 +6,10 @@
   <class name="AttendType" table="type_table">
   	<cache usage="read-only"/>
   	<id name="id" column="type_id" type="integer">
-  		<generator class="identity"></generator>
+  		<generator class="identity"/>
   	</id>
   	<property name="name" column="type_name" type="string" 
   		not-null="true" length="50" />
-  	<property name="acerce" column="acerce_amount" type="double" not-null="true"/>
+  	<property name="amerce" column="amerce_amount" type="double" not-null="true"/>
   </class>
 </hibernate-mapping>

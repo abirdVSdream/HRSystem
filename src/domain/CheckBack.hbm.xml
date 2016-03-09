@@ -6,7 +6,7 @@
   <class name="CheckBack" table="check_table">
   	<cache usage="read-only"/>
   	<id name="id" column="check_id" type="integer">
-  		<generator class="identity"></generator>
+  		<generator class="identity"/>
   	</id>
   	<property name="reason" column="check_reason" type="string" length="50"/>
   	<property name="result" column="check_result" type="boolean"
